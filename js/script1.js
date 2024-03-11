@@ -121,18 +121,18 @@ class Produto {
        this.editId = null;
     }
 
-    deletar(id) {
-
+    async deletar(id) {
         if(confirm('Deseja realmente deletar o produto do ID ' + id)) {
-            let tbody = document.getElementById('tbody');
-        
-        for(let i = 0; i < this.arrayProdutos.length; i++) {
-            if(this.arrayProdutos[i].id == id) {
-                this.arrayProdutos.splice(i, 1);
-                tbody.deleteRow(i);
-            }
-        }
-
+            await fetch('http://localhost:3302/products',
+                {
+                    method: 'DELETE',
+                    body: JSON.stringify({ id }),
+                    headers: {
+                        'Content-type': 'application/json; charset=UTF-8',
+                    },
+                })
+            .then(T => T.json())
+            .then(() => this.carregarDados());
         }
     }
 }
